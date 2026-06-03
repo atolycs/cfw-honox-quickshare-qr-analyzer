@@ -1,0 +1,5 @@
+ignoredBuiltDependencies:
+  - lefthook
+
+onlyBuiltDependencies:
+  - '@atolycs/biome-config'
