@@ -1,0 +1,96 @@
+import { BrowserQRCodeReader, type IScannerControls } from "@zxing/browser";
+import { Result } from "@zxing/library";
+import { type FC, useEffect, useRef, useState } from "hono/jsx";
+
+const QrCodeReader: FC = () => {
+  const controlsRef = useRef<IScannerControls | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const [qrCodes, setQrCodes] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!videoRef.current) {
+      return;
+    }
+
+    const codeReader = new BrowserQRCodeReader();
+    codeReader.decodeFromVideoDevice(
+      undefined,
+      videoRef.current,
+      (result, error, controls) => {
+        controlsRef.current = controls;
+        if (error || !result) {
+          return;
+        }
+        setQrCodes((codes) => [result.getText(), ...codes]);
+      },
+    );
+
+    return () => {
+      controlsRef.current?.stop();
+      controlsRef.current = null;
+    };
+  }, []);
+
+  return (
+    <div>
+      <video
+        style={{ maxWidth: "100%", maxHeight: "100%", height: "100%" }}
+        ref={videoRef}
+        muted={true}
+      />
+      {/* 
+      <ul>
+        {qrCodes?.map((code, i) => (
+          <>
+            <li key={i}>{code}</li>
+            <a href={code}>Quick Share</a>
+          </>
+        ))}
+      </ul> */}
+    </div>
+  );
+};
+
+export default QrCodeReader;
+
+/* const QrCodeReader: FC<{ onReadQRCode: (text: Result) => void }> = ({ onReadQRCode }) => {
+  const controlsRef = useRef<IScannerControls | null>()
+  const videoRef = useRef<HTMLVideoElement>(null)
+  useEffect(() => {
+    if (!videoRef.current) {
+      return
+    }
+
+    const codeReader = new BrowserQRCodeReader()
+    codeReader.decodeFromVideoDevice(
+      undefined,
+      videoRef.current,
+      (result, error, controls) => {
+        if (error) {
+          return
+        }
+
+        if (result) {
+          onReadQRCode(result)
+        }
+        controlsRef.current = controls
+      })
+
+    return () => {
+      if (!controlsRef.current) {
+        return
+      }
+      controlsRef.current.stop()
+      controlsRef.current = null
+    }
+  }, [onReadQRCode])
+
+  return <video
+    style={{ maxWidth: "100%", maxHeight: "100%", height: "100%" }}
+    ref={videoRef}
+  />
+}
+
+export default QrCodeReader;
+ */

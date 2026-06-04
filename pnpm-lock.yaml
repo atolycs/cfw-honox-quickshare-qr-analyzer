@@ -13,7 +13,10 @@ importers:
         version: 2.4.16
       '@zxing/browser':
         specifier: ^0.2.0
-        version: 0.2.0(@zxing/library@0.22.0)
+        version: 0.2.0(@zxing/library@0.23.0)
+      '@zxing/library':
+        specifier: ^0.23.0
+        version: 0.23.0
       hono:
         specifier: ^4.12.23
         version: 4.12.23
@@ -814,8 +817,8 @@ packages:
     peerDependencies:
       '@zxing/library': ^0.22.0
 
-  '@zxing/library@0.22.0':
-    resolution: {integrity: sha512-BmInervZV7NwaZWX1LW64sZ4Lh4wxXYFZwGmj98ArPOkRXCtO9b8Gog0Xyh82dsYYGOeRxX+aAhLSq+hQ2XLZQ==}
+  '@zxing/library@0.23.0':
+    resolution: {integrity: sha512-6fkkoFwP8CHxl6ugnPsj74PLJgX2iRv5zczGAyt5OBzQgxFhuhF0NCEc4t4OvSr8xAv2MRLlI0Iu9ZGDZQ2urA==}
     engines: {node: '>= 24.0.0'}
 
   '@zxing/text-encoding@0.9.0':
@@ -1977,13 +1980,13 @@ snapshots:
 
   '@vue/shared@3.5.35': {}
 
-  '@zxing/browser@0.2.0(@zxing/library@0.22.0)':
+  '@zxing/browser@0.2.0(@zxing/library@0.23.0)':
     dependencies:
-      '@zxing/library': 0.22.0
+      '@zxing/library': 0.23.0
     optionalDependencies:
       '@zxing/text-encoding': 0.9.0
 
-  '@zxing/library@0.22.0':
+  '@zxing/library@0.23.0':
     dependencies:
       ts-custom-error: 3.3.1
     optionalDependencies:
