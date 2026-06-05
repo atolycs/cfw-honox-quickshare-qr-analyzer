@@ -8,6 +8,10 @@ const QrCodeReader: FC = () => {
 
   const [qrCodes, setQrCodes] = useState<string[]>([]);
 
+  const [cameraError, setCameraError] = useState<string | null>(null)
+  const [isScanning, setIsScanning] = useState(true)
+
+
   useEffect(() => {
     if (!videoRef.current) {
       return;
@@ -20,11 +24,28 @@ const QrCodeReader: FC = () => {
       (result, error, controls) => {
         controlsRef.current = controls;
         if (error || !result) {
+          if (error) {
+            if (error.name === "NotAllowedError") {
+              setCameraError("Camera Access Denied. Please check browser configuration")
+              setIsScanning(false)
+              controls?.stop()
+            }
+          }
           return;
         }
-        setQrCodes((codes) => [result.getText(), ...codes]);
+
+        if (result) {
+          controls?.stop()
+          controlsRef.current = null
+          setIsScanning(false);
+          setQrCodes((codes) => [result.getText(), ...codes]);
+        }
       },
-    );
+    ).catch((err: Error) => {
+      if (err.name === "NotAllowedError") {
+        setCameraError("Camera Access Denied. Please check Browser Permission.")
+      }
+    });
 
     return () => {
       controlsRef.current?.stop();
@@ -34,20 +55,36 @@ const QrCodeReader: FC = () => {
 
   return (
     <div>
-      <video
-        style={{ maxWidth: "100%", maxHeight: "100%", height: "100%" }}
-        ref={videoRef}
-        muted={true}
-      />
-      {/* 
-      <ul>
-        {qrCodes?.map((code, i) => (
-          <>
-            <li key={i}>{code}</li>
-            <a href={code}>Quick Share</a>
-          </>
-        ))}
-      </ul> */}
+      {
+        cameraError && (
+          <div style={{ color: "red" }}>
+            ⚠️ {cameraError}
+          </div>
+        )
+      }
+      {
+        isScanning && !cameraError && (
+          <video
+            style={{ maxHeight: "100%", maxHeight: "100%", height: "100%" }}
+            ref={videoRef}
+            muted={true}
+          />
+        )
+      }
+      {/* <video */}
+      {/*   style={{ maxWidth: "100%", maxHeight: "100%", height: "100%" }} */}
+      {/*   ref={videoRef} */}
+      {/*   muted={true} */}
+      {/* /> */}
+      {
+        <ul>
+          {qrCodes?.map((code, i) => (
+            <>
+              <li key={i}>{code}</li>
+              <a href={code}>Quick Share</a>
+            </>
+          ))}
+        </ul>}
     </div>
   );
 };
