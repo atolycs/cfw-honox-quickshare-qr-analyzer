@@ -8,9 +8,8 @@ const QrCodeReader: FC = () => {
 
   const [qrCodes, setQrCodes] = useState<string[]>([]);
 
-  const [cameraError, setCameraError] = useState<string | null>(null)
-  const [isScanning, setIsScanning] = useState(true)
-
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(true);
 
   useEffect(() => {
     if (!videoRef.current) {
@@ -18,34 +17,40 @@ const QrCodeReader: FC = () => {
     }
 
     const codeReader = new BrowserQRCodeReader();
-    codeReader.decodeFromVideoDevice(
-      undefined,
-      videoRef.current,
-      (result, error, controls) => {
-        controlsRef.current = controls;
-        if (error || !result) {
-          if (error) {
-            if (error.name === "NotAllowedError") {
-              setCameraError("Camera Access Denied. Please check browser configuration")
-              setIsScanning(false)
-              controls?.stop()
+    codeReader
+      .decodeFromVideoDevice(
+        undefined,
+        videoRef.current,
+        (result, error, controls) => {
+          controlsRef.current = controls;
+          if (error || !result) {
+            if (error) {
+              if (error.name === "NotAllowedError") {
+                setCameraError(
+                  "Camera Access Denied. Please check browser configuration",
+                );
+                setIsScanning(false);
+                controls?.stop();
+              }
             }
+            return;
           }
-          return;
-        }
 
-        if (result) {
-          controls?.stop()
-          controlsRef.current = null
-          setIsScanning(false);
-          setQrCodes((codes) => [result.getText(), ...codes]);
+          if (result) {
+            controls?.stop();
+            controlsRef.current = null;
+            setIsScanning(false);
+            setQrCodes((codes) => [result.getText(), ...codes]);
+          }
+        },
+      )
+      .catch((err: Error) => {
+        if (err.name === "NotAllowedError") {
+          setCameraError(
+            "Camera Access Denied. Please check Browser Permission.",
+          );
         }
-      },
-    ).catch((err: Error) => {
-      if (err.name === "NotAllowedError") {
-        setCameraError("Camera Access Denied. Please check Browser Permission.")
-      }
-    });
+      });
 
     return () => {
       controlsRef.current?.stop();
@@ -55,22 +60,14 @@ const QrCodeReader: FC = () => {
 
   return (
     <div>
-      {
-        cameraError && (
-          <div style={{ color: "red" }}>
-            ⚠️ {cameraError}
-          </div>
-        )
-      }
-      {
-        isScanning && !cameraError && (
-          <video
-            style={{ maxHeight: "100%", maxHeight: "100%", height: "100%" }}
-            ref={videoRef}
-            muted={true}
-          />
-        )
-      }
+      {cameraError && <div style={{ color: "red" }}>⚠️ {cameraError}</div>}
+      {isScanning && !cameraError && (
+        <video
+          style={{ maxHeight: "100%", maxWidth: "100%", height: "100%" }}
+          ref={videoRef}
+          muted={true}
+        />
+      )}
       {/* <video */}
       {/*   style={{ maxWidth: "100%", maxHeight: "100%", height: "100%" }} */}
       {/*   ref={videoRef} */}
@@ -84,7 +81,8 @@ const QrCodeReader: FC = () => {
               <a href={code}>Quick Share</a>
             </>
           ))}
-        </ul>}
+        </ul>
+      }
     </div>
   );
 };
