@@ -73,14 +73,38 @@ const QrCodeReader: FC = () => {
       {/*   ref={videoRef} */}
       {/*   muted={true} */}
       {/* /> */}
+      {/* quickshare.google */}
+
       {
         <ul>
-          {qrCodes?.map((code, i) => (
-            <>
-              <li key={i}>{code}</li>
-              <a href={code}>Quick Share</a>
-            </>
-          ))}
+          {qrCodes?.map((code: string | null, i) => {
+            if (code?.match(/^https:\/\/quickshare.google.*/)) {
+              return (
+                <>
+                  <li key={i}>{code}</li>
+                  <a href={code}>Quick Share</a>
+                </>
+              );
+            } else {
+              return (
+                <>
+                  <li key={i} style={{ color: "red" }}>
+                    ⚠️ {i + 1} Times: This QRcode is not QuickShare Generated.
+                    Please retry Again.
+                  </li>
+                  <button
+                    type="button"
+                    class="px-4 py-2 bg-orange-400 text-white rounded cursor-pointer"
+                    onClick={() => {
+                      window.location.reload();
+                    }}
+                  >
+                    Reload
+                  </button>
+                </>
+              );
+            }
+          })}
         </ul>
       }
     </div>

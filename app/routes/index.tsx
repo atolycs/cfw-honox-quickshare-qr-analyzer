@@ -1,4 +1,3 @@
-import { useState } from "hono/jsx";
 import { createRoute } from "honox/factory";
 import Counter from "../islands/counter";
 import QrCodeReader from "../islands/QrCodeReader";
