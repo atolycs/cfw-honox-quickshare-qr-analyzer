@@ -11,7 +11,20 @@ const QrCodeReader: FC = () => {
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(true);
 
+  const [permissionState, setPermissionState] = useState<
+    PermissionState | "unknown"
+  >("unknown");
+
   useEffect(() => {
+    navigator.permissions
+      .query({ name: "camera" as PermissionName })
+      .then((result) => {
+        setPermissionState(result.state);
+        result.onchange = () => setPermissionState(result.state);
+      })
+      .catch(() => {
+        setPermissionState("unknown");
+      });
     if (!videoRef.current) {
       return;
     }
@@ -57,6 +70,10 @@ const QrCodeReader: FC = () => {
       controlsRef.current = null;
     };
   }, []);
+
+  const handleRetry = () => {
+    window.location.reload();
+  };
 
   return (
     <div class="flex flex-col items-center gap-6" style={{ width: "100%" }}>
@@ -144,11 +161,13 @@ const QrCodeReader: FC = () => {
       {isScanning && !cameraError && (
         <div class="flex items-center gap-2">
           <span
-            class="inline-block w-2 h-2 rounded-full bg-[#4f8ef7]"
+            class={`inline-block w-2 h-2 rounded-full ${permissionState === "prompt" ? "bg-[#f59e0b]" : "bg-[#4f8ef7]"}`}
             style={{ animation: "pulse 1.5s ease-in-out infinite" }}
           />
           <span class="text-[#8892a4] text-xs font-mono tracking-wide">
-            Scanning...
+            {permissionState === "prompt" || permissionState === "unknown"
+              ? "Waiting for camera permission..."
+              : "Scanning..."}
           </span>
         </div>
       )}
@@ -167,93 +186,102 @@ const QrCodeReader: FC = () => {
                   <span className="text-xs font-mono tracking-wide uppercase text-[#22c55e]">
                     QuickShare URL detected
                   </span>
-                  <p class="text-[#c8d3e6] text-sm font-mono break-all leading-relaxed">
-                    {code}
-                  </p>
-                  <a
-                    href={code}
-                    class="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-[#4f8ef7] hover:bg-[#6ba3f9]"
-                  >
-                    Open QuickShare
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <title>Link</title>
-                      <path
-                        d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </a>
                 </div>
+                <p class="text-[#c8d3e6] text-sm font-mono break-all leading-relaxed">
+                  {code}
+                </p>
+                <a
+                  href={code}
+                  class="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-[#4f8ef7] hover:bg-[#6ba3f9]"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  Open QuickShare
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>Link</title>
+                    <path
+                      d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
               </div>
             ) : (
-              <div>aaa</div>
+              <div
+                key={i}
+                class="bg-[#1a0e0e] border-[#3d1a1a] rounded-xl border p-4 flex flex-col gap-3"
+              >
+                <div class="flex items-center gap-2">
+                  <span class="bg-[#ef4444] w-2 h-2 rounded-full flex-shrink-0" />
+                  <span class="text-[#ef4444] text-xs font-mono tracking-wide uppercase">
+                    No a Quickshare QR code
+                  </span>
+                </div>
+                <p class="text-xs leading-relaxed text-[#8892a4]">
+                  This QR code doesn't point to{" "}
+                  <span class="text-[#c8d3e6]">quickshare.google</span>. Please
+                  try scanning again.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleRetry}
+                  class="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-[#1e2030] hover:bg-[#252838] active:bg-[#181c2a] text-sm font-semibold transition-colors border border-[#2a3048]"
+                >
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>Reload</title>
+                    <path
+                      d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M3 3v5h5"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Try again
+                </button>
+              </div>
             );
           })}
         </div>
       )}
+      <style>
+        {`
+      @keyframes scanline {
+        0% { top: 24px; }
+        50% { top: calc(100% - 24px); }
+        100% { top: 24px; }
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+    `}
+      </style>
     </div>
   );
-
-  // return (
-  //   <div class="place-content-center">
-  //     {cameraError && <div style={{ color: "red" }}>⚠️ {cameraError}</div>}
-  //     {isScanning && !cameraError && (
-  //       <video
-  //         style={{ maxHeight: "100%", maxWidth: "100%", height: "100%" }}
-  //         ref={videoRef}
-  //         muted={true}
-  //       />
-  //     )}
-  //     {/* <video */}
-  //     {/*   style={{ maxWidth: "100%", maxHeight: "100%", height: "100%" }} */}
-  //     {/*   ref={videoRef} */}
-  //     {/*   muted={true} */}
-  //     {/* /> */}
-  //     {/* quickshare.google */}
-  //
-  //     {
-  //       <ul>
-  //         {qrCodes?.map((code: string | null, i) => {
-  //           if (code?.match(/^https:\/\/quickshare.google.*/)) {
-  //             return (
-  //               <>
-  //                 <li key={i}>{code}</li>
-  //                 <a href={code}>Quick Share</a>
-  //               </>
-  //             );
-  //           } else {
-  //             return (
-  //               <>
-  //                 <li key={i} style={{ color: "red" }}>
-  //                   ⚠️ {i + 1} Times: This QRcode is not QuickShare Generated.
-  //                   Please retry Again.
-  //                 </li>
-  //                 <button
-  //                   type="button"
-  //                   class="px-4 py-2 bg-orange-400 text-white rounded cursor-pointer"
-  //                   onClick={() => {
-  //                     window.location.reload();
-  //                   }}
-  //                 >
-  //                   Reload
-  //                 </button>
-  //               </>
-  //             );
-  //           }
-  //         })}
-  //       </ul>
-  //     }
-  //   </div>
-  // );
 };
 
 export default QrCodeReader;
