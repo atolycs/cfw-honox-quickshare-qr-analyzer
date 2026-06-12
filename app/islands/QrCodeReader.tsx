@@ -182,7 +182,7 @@ const QrCodeReader: FC = () => {
                 class="bg-[#0d1a2d] border-[#1a3358] rounded-xl border p-4 flex flex-col gap-3"
               >
                 <div className="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full flex-shrink-0 bg-[#22c5ee]" />
+                  <span class="w-2 h-2 rounded-full shrink-0 bg-[#22c5ee]" />
                   <span className="text-xs font-mono tracking-wide uppercase text-[#22c55e]">
                     QuickShare URL detected
                   </span>
@@ -221,7 +221,7 @@ const QrCodeReader: FC = () => {
                 class="bg-[#1a0e0e] border-[#3d1a1a] rounded-xl border p-4 flex flex-col gap-3"
               >
                 <div class="flex items-center gap-2">
-                  <span class="bg-[#ef4444] w-2 h-2 rounded-full flex-shrink-0" />
+                  <span class="bg-[#ef4444] w-2 h-2 rounded-full shrink-0" />
                   <span class="text-[#ef4444] text-xs font-mono tracking-wide uppercase">
                     No a Quickshare QR code
                   </span>
