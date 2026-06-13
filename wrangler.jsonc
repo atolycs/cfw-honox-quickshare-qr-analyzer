@@ -6,7 +6,8 @@
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "./dist"
-  }
+  },
+  "workers_dev": false
   // "vars": {
   //   "MY_VAR": "my-variable"
   // },
