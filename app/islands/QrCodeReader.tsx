@@ -187,9 +187,13 @@ const QrCodeReader: FC = () => {
                     QuickShare URL detected
                   </span>
                 </div>
-                <p class="text-[#c8d3e6] text-sm font-mono break-all leading-relaxed">
-                  {code}
-                </p>
+                {import.meta.env.PROD ? (
+                  ""
+                ) : (
+                  <p class="text-[#c8d3e6] text-sm font-mono break-all leading-relaxed">
+                    {code}
+                  </p>
+                )}
                 <a
                   href={code}
                   class="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-[#4f8ef7] hover:bg-[#6ba3f9]"
