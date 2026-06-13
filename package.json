@@ -10,21 +10,21 @@
   },
   "private": true,
   "dependencies": {
-    "@biomejs/biome": "^2.4.16",
+    "@biomejs/biome": "^2.5.0",
     "@zxing/browser": "^0.2.0",
     "@zxing/library": "^0.23.0",
-    "hono": "^4.12.23",
+    "hono": "^4.12.25",
     "honox": "0.1.56",
     "lefthook": "^2.1.9"
   },
   "devDependencies": {
     "@atolycs/biome-config": "^0.3.3",
-    "@cloudflare/workers-types": "^4.20260420.1",
+    "@cloudflare/workers-types": "^4.20260613.1",
     "@hono/vite-build": "^1.11.1",
-    "@hono/vite-dev-server": "^0.25.2",
-    "@tailwindcss/vite": "^4.2.2",
-    "tailwindcss": "^4.2.2",
-    "vite": "^8.0.9",
-    "wrangler": "^4.83.0"
+    "@hono/vite-dev-server": "^0.25.3",
+    "@tailwindcss/vite": "^4.3.1",
+    "tailwindcss": "^4.3.1",
+    "vite": "^8.0.16",
+    "wrangler": "^4.100.0"
   }
 }
