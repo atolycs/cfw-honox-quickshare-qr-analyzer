@@ -234,7 +234,7 @@ const QrCodeReader: FC = () => {
                 <button
                   type="button"
                   onClick={handleRetry}
-                  class="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-[#1e2030] hover:bg-[#252838] active:bg-[#181c2a] text-sm font-semibold transition-colors border border-[#2a3048]"
+                  class="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-[#2a1f1f] hover:bg-[#3a2a2a] active:bg-[#1e1616] text-[#f87171] text-sm font-semibold transition-colors border border-[#5a2a2a] cursor-pointer"
                 >
                   <svg
                     width="15"
