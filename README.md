@@ -1,6 +1,6 @@
 # Google Quickshare QR Code Decoder on Cloudflare Workers
 
-Using PC or laptop camera Google Qcuikshare QR Code in browser.
+Using PC or laptop camera Google Qucikshare QR Code in browser.
 
 ## Userd Modules
 * [honox](https://github.com/honojs/honox)
