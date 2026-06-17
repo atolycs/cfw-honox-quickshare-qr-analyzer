@@ -2,7 +2,7 @@
 
 Using PC or laptop camera Google Qucikshare QR Code in browser.
 
-## Userd Modules
+## Used Modules
 * [honox](https://github.com/honojs/honox)
   * [TailwindCSS](https://github.com/tailwindcss/tailwindcss)
 * [zxing](https://github.com/zxing/zxing)
