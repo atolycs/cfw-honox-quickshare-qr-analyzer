@@ -11,8 +11,9 @@ Using PC or laptop camera Google Qcuikshare QR Code in browser.
 * Checked
 
 | PC | OS | Browser | Result |
-|+--+|+--+|+-------+|+------+|
+|:--:|:--:|:-------:|:------:|
 | MacBook Pro (M5) | macOS Tahoe 26.5 | Firefox ESR 140.11 | ✅ |
+
 
 * Server Start
   * pnpm
