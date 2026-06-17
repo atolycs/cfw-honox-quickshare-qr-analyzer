@@ -8,20 +8,20 @@ Using PC or laptop camera Google Qcuikshare QR Code in browser.
 * [zxing](https://github.com/zxing/zxing)
 
 
-* Checked
+## Checked
 
 | PC | OS | Browser | Result |
 |:--:|:--:|:-------:|:------:|
 | MacBook Pro (M5) | macOS Tahoe 26.5 | Firefox ESR 140.11 | ✅ |
 
 
-* Server Start
-  * pnpm
-  ```
-  pnpm run dev
-  ```
-  * npm
-  ```
-  npm run dev
-  ```
+## Server Start
+* pnpm
+```
+pnpm run dev
+```
+* npm
+```
+npm run dev
+```
 
